@@ -31,6 +31,29 @@ shinyUI(pageWithSidebar(
               ),
               
   wellPanel( 
+            p(strong("Plot")), 
+            
+            selectInput("variable2", "X axis:",
+              
+               as.list(
+               
+               unique(as.character(as.vector(colnames(dfwData)[5:ncol])))
+                 
+                   )
+  
+              ),
+              
+            selectInput("variable3", "Y axis:",
+              
+               as.list(
+               
+               unique(as.character(as.vector(dfwData[,c(8)])))
+                 
+                   ) 
+            
+            ),            
+              
+  wellPanel( 
             p(strong("Analysis")), 
             
             checkboxInput(inputId = "CCF", label = "Show cross correlation", value = FALSE) 
