@@ -19,6 +19,7 @@ shinyUI(pageWithSidebar(
                    )
   
               ),
+
               
   selectInput("samplelayer", "Sample Layer:",
               
@@ -37,7 +38,7 @@ shinyUI(pageWithSidebar(
               
                as.list(
                
-               unique(as.character(as.vector(colnames(dfwData)[5:30])))
+               unique(as.character(as.vector(colnames(dfwData)[5:53])))
                  
                    )
   
@@ -47,7 +48,7 @@ shinyUI(pageWithSidebar(
               
                as.list(
                
-               unique(as.character(as.vector(colnames(dfwData)[6:30])))
+               unique(as.character(as.vector(colnames(dfwData)[5:53])))
                  
                    )
             
@@ -60,9 +61,54 @@ shinyUI(pageWithSidebar(
             
             checkboxInput(inputId = "CCF", label = "Show cross correlation", value = FALSE) 
             
-            )
+            ),
+            
+  wellPanel( 
+            p(strong("Compare Lakes")),
+            
+            selectInput("variable5", "Lake name:",
+              
+               as.list(
+               
+               unique(as.character(as.vector(dfwData[,c(2)])))
+                 
+                   )
+  
+              ),
+              
+            selectInput("variable6", "Lake2 name:",
+              
+               as.list(
+               
+               unique(as.character(as.vector(dfwData[,c(2)])))
+                 
+                   )
+  
+              ),
+              
+            selectInput("samplelayer2", "Sample Layer:",
+              
+               as.list(
+               
+               unique(as.character(as.vector(dfwData[,c(8)])))
+                 
+                   )
+  
+              ),
+              
+            selectInput("variable7", "What to compare:",
+              
+               as.list(
+               
+               unique(as.character(as.vector(colnames(dfwData)[5:53])))
+                 
+                   )
+  
+              )
+
+            
                          
-                   ),
+                   )),
   
   mainPanel(
     
@@ -70,7 +116,9 @@ shinyUI(pageWithSidebar(
     
     conditionalPanel(condition = "input.CCF", 
          br(), 
-         plotOutput("ccfPlot"))   
+         plotOutput("ccfPlot")),
+         
+    plotOutput("lake2Plot")  
     
            )
 ))

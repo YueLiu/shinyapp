@@ -7,25 +7,25 @@ library(xts)
 # Define server logic required to plot pH value against ANC
 shinyServer(function(input, output) {
 
-  # Generate a plot of the requested variable via time and only 
+#  Generate a plot of the requested variable via time and only 
 
   output$lakePlot <- renderPlot({
   	dfwData <- read.csv("AEAP_NYSERDA_Chem_94-12_v9_web.csv")
-  # Create Line Chart
-#print(colnames(dfwData))
+#  Create Line Chart
+#  print(colnames(dfwData))
 	alllakes = unique(dfwData[,2])
 	nlakes = length(alllakes)
 	dfwData$Date <- as.Date(dfwData$Date, "%d-%b-%y")	
 	dfwData[,input$variable3] <- as.numeric(dfwData[,input$variable3])
     dfwData[,input$variable4] <- as.numeric(dfwData[,input$variable4]) 
-#print(alllakes)
-# add lines 
+#  print(alllakes)
+#  add lines 
 #  for(i in 1:nlakes){
-  	#print(i)
+#  print(i)
 #  i = which(dfwData[dfwData[,2] == input$variable,])
-print(input$variable)
-print(input$variable3)
-print(input$variable4)
+#  print(input$variable)
+#  print(input$variable3)
+#  print(input$variable4)
 
 
 
@@ -96,6 +96,54 @@ legend("topleft", legend=c(input$variable3,input$variable4), cex=0.8, lty=rep(1,
    	 ccf(drop(lake_x),drop(lake_y),main="Cross Correlation Analysis")
    	 
    	 })
+   	 
+#  2rd part starts here
+
+  output$lake2Plot <- renderPlot({
+  	dfwData <- read.csv("AEAP_NYSERDA_Chem_94-12_v9_web.csv")
+#  Create Line Chart
+#  print(colnames(dfwData))
+	alllakes = unique(dfwData[,2])
+	nlakes = length(alllakes)
+	dfwData$Date <- as.Date(dfwData$Date, "%d-%b-%y")	
+	dfwData[,input$variable7] <- as.numeric(dfwData[,input$variable7])
+#   dfwData[,input$variable4] <- as.numeric(dfwData[,input$variable4]) 
+#  print(alllakes)
+#  add lines 
+#  for(i in 1:nlakes){
+#  print(i)
+#  i = which(dfwData[dfwData[,2] == input$variable,])
+#  print(input$variable)
+#  print(input$variable3)
+#  print(input$variable4)
+
+
+
+	subdata2 = na.omit(dfwData[dfwData[,2] == input$variable5 & dfwData[,8] == input$samplelayer2, c("LakeName","Date",input$variable7)])
+	
+	subdata3 = na.omit(dfwData[dfwData[,2] == input$variable6 & dfwData[,8] == input$samplelayer2, c("LakeName","Date",input$variable7)])
+	
+
+	#subdata = dfwData[dfwData[,2] == alllakes[i],]
+#print(alllakes[i])
+
+    lake1_wtc = xts(subdata2[,input$variable7],order.by= subdata2$Date)
+    lake2_wtc = xts(subdata3[,input$variable7],order.by= subdata3$Date)
+    
+    lake_merge = merge(lake1_wtc,lake2_wtc)
+    print(lake_merge)
+	
+	plot.zoo(lake_merge, plot.type="single", col = c("red", "blue"))
+    
+
+    
+# add a legend
+
+legend("topleft", legend=c(input$variable5,input$variable6), cex=0.8, lty=rep(1,2),col=c("red", "blue"))
+
+  })
+  
+
   
   })
 
